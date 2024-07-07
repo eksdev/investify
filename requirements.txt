@@ -1,9 +1,0 @@
-streamlit
-yfinance
-requests
-beautifulsoup4
-pandas
-numpy
-tensorflow
-scipy
-textblob

@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "your-project-name"
+version = "0.1.0"
+description = "Description of your project"
+authors = ["Your Name <your.email@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+streamlit = "*"
+yfinance = "*"
+requests = "*"
+beautifulsoup4 = "*"
+pandas = "*"
+numpy = "1.21.6"
+tensorflow = "2.9.1"
+scipy = "*"
+textblob = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
