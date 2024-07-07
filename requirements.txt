@@ -4,6 +4,6 @@ requests
 beautifulsoup4
 pandas
 numpy
-tensorflow==2.9.1
+tensorflow
 scipy
 textblob
