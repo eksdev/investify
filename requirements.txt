@@ -3,7 +3,7 @@ yfinance
 requests
 beautifulsoup4
 pandas
-numpy==1.21.6
-tensorflow==2.9.1
+numpy
+tensorflow
 scipy
 textblob
