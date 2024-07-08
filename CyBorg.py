@@ -33,6 +33,47 @@ def requests_custom(url):
         print(f"Other error occurred: {err}")
     return None
 
+#-- This section is a collection of different webscraping functions:
+
+def cost_of_debt(ticker):
+    # will return the total amt spent on debt interest in most recent ann report.
+    # Cost of Debt = Interest Spent ($)/ Net Debt
+    url = f'https://finance.yahoo.com/quote/{ticker}/financials/'
+
+    html = requests_custom(url)
+    if html is None:
+        return None
+
+    soup = BeautifulSoup(html, 'html.parser')
+
+    # Find the financial table container
+    table_container = soup.find('div', class_='tableContainer svelte-1pgoo1f')
+
+    if not table_container:
+        return None
+
+    # Extract headers (dates)
+    headers = []
+    table_header = table_container.find('div', class_='tableHeader svelte-1pgoo1f')
+    if table_header:
+        header_row = table_header.find('div', class_='row svelte-1ezv2n5')
+        headers = [col.get_text(strip=True) for col in header_row.find_all('div', class_='column svelte-1ezv2n5')]
+    
+    # Extract data rows
+    rows = table_container.find_all('div', class_='row lv-0 svelte-1xjz32c')
+    for row in rows:
+        metric_name_div = row.find('div', class_='rowTitle svelte-1xjz32c')
+        if metric_name_div and 'interest expense' in metric_name_div.get_text(strip=True).lower():
+            values = [col.get_text(strip=True).replace(',', '') for col in row.find_all('div', class_='column svelte-1xjz32c') if col.get_text(strip=True)]
+            if len(values) == len(headers):
+                most_recent_value = values[0]  # Assuming the first column after 'Metric' is the most recent year
+                most_recent_value = most_recent_value.replace(',', '').replace('(', '-').replace(')', '')
+                return float(most_recent_value)
+
+    print("Operating Interest Expense not found in the data.")
+    return None
+
+
 def get_metrics(ticker):
     url = f"https://finviz.com/quote.ashx?t={ticker}&p=d"
     html = requests_custom(url)
@@ -395,6 +436,26 @@ class StonkGather:
         st.line_chart(forecast_data)
         st.markdown(f"### {self.ticker} Historical and Forecasted Prices")
 
+
+
+# Func to get Net Debt for Cost of Debt Presentation:#
+def get_net_debt(ticker):
+    balance_sheet = get_balance_sheet_metrics(ticker)
+    
+    if 'Net Debt' in balance_sheet['Metric'].values:
+        # Extract the value from the '1/31/2024' column where 'Metric' is 'Net Debt'
+        net_debt_value = balance_sheet.loc[balance_sheet['Metric'] == 'Net Debt', '1/31/2024'].values[0]
+        
+        # Remove commas and convert to float
+        net_debt_value = net_debt_value.replace(",", "")
+        net_debt_value = float(net_debt_value)
+        
+        return net_debt_value
+    else:
+        print(f"Net Debt not found in the balance sheet for {ticker}")
+        return None
+
+
 # Streamlit app
 st.title("Investify ® Dashboard")
 
@@ -446,15 +507,20 @@ if ticker:
     metrics_df = get_metrics(ticker)
     st.table(metrics_df)
 
-    # logic for collecting and running for related tickers isn't working in online version. 
-    #st.subheader("Similar Stocks Metrics")
-    #similar_stocks_df = get_similar_stocks(ticker)
-    #if len(similar_stocks_df) > 0: 
-    #    st.write("Similar Stocks are found either through industry, or trading characteristics. ")
-    #    st.write(similar_stocks_df)
-    #else:
-    #    default = f"No similar stocks were found for {ticker}"
-    #    st.write(default)
+    st.subheader("Calculating the Cost of Debt to the Firm")
+    ie = cost_of_debt(ticker) # interest expense
+    nd = get_net_debt(ticker) # net debt
+    
+    cod = ie / nd
+    
+    if cod < 0.05:
+        st.write("Cost of Debt to the Firm is Relatively Low: {:.2f}%".format(cod * 100))
+    elif 0.05 <= cod < 0.1:
+        st.write("Cost of Debt to the Firm is Moderate: {:.2f}%".format(cod * 100))
+    else:
+        st.write("Cost of Debt to the Firm is High: {:.2f}%".format(cod * 100))
+    
+    
 
     
 
