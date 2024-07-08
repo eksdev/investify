@@ -448,7 +448,7 @@ if ticker:
     st.subheader("Similar Stocks Metrics")
     similar_stocks_df = get_similar_stocks(ticker)
     if len(similar_stocks_df) > 0: 
-        st.write("Similar Stocks are found either through industry, or trading characteristics. "
+        st.write("Similar Stocks are found either through industry, or trading characteristics. ")
         st.write(similar_stocks_df)
     else:
         default = f"No similar stocks were found for {ticker}"
