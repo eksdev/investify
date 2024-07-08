@@ -409,7 +409,7 @@ if ticker:
     st.write(description)
 
     if len(ratings) > 0:
-        st.write(f"Opinions of the {len(ratings} analysts covering {ticker}")
+        st.write(f"Opinions of the {len(ratings)} analysts covering {ticker}")
         st.write("Analyst Ratings:")  # Analyst Ratings
         st.write(pd.DataFrame(ratings))
     else: 
