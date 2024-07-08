@@ -321,8 +321,9 @@ class StonkGather:
         rsi = 100 - (100 / (1 + rs))
         rsi_data = pd.DataFrame({'RSI': rsi}, index=self.data.index)
 
-        st.line_chart(rsi_data)
-        st.markdown(f"### {self.ticker} RSI over {self.p}")
+        # will enable the graphing of rsi
+        #st.line_chart(rsi_data)
+        #st.markdown(f"### {self.ticker} RSI over {self.p}")
 
     def predict_gbm(self, df, days_in_future, iterations):
         prices = tf.convert_to_tensor(df.values, dtype=tf.float32)
