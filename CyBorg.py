@@ -100,6 +100,23 @@ def get_metrics(ticker):
     
     return metrics_df
 
+def get_market_cap(ticker):
+    key_metrics = get_metrics(ticker) # Assuming you have a function to get key metrics
+    
+    if 'Metric' not in key_metrics.columns:
+        print(f"Column 'Metric' not found in the key metrics for {ticker}")
+        return None
+    
+    if 'Market Cap' not in key_metrics['Metric'].values:
+        print(f"'Market Cap' not found in the key metrics for {ticker}")
+        return None
+    
+    market_cap_str = key_metrics.loc[key_metrics['Metric'] == 'Market Cap', 'Value'].values[0]
+    market_cap_str = market_cap_str.replace("B", "e9").replace("M", "e6").replace(",", "")
+    market_cap = float(eval(market_cap_str))
+    
+    return market_cap
+
 def get_similar_stocks(ticker):
     url = f"https://finance.yahoo.com/quote/{ticker}/"
     html = requests_custom(url)
@@ -438,31 +455,6 @@ class StonkGather:
 
 
 
-# Func to get Net Debt for Cost of Debt Presentation:#
-def get_net_debt(ticker):
-    balance_sheet = get_balance_sheet_metrics(ticker)
-    
-    if 'Metric' not in balance_sheet.columns:
-        print(f"Column 'Metric' not found in the balance sheet for {ticker}")
-        return None
-    
-    if '1/31/2024' not in balance_sheet.columns:
-        print(f"Column '1/31/2024' not found in the balance sheet for {ticker}")
-        return None
-
-    if 'Net Debt' not in balance_sheet['Metric'].values:
-        print(f"'Net Debt' not found in the balance sheet for {ticker}")
-        return None
-
-    # Extract the value from the '1/31/2024' column where 'Metric' is 'Net Debt'
-    net_debt_value = balance_sheet.loc[balance_sheet['Metric'] == 'Net Debt', '1/31/2024'].values[0]
-    
-    # Remove commas and convert to float
-    net_debt_value = net_debt_value.replace(",", "")
-    net_debt_value = float(net_debt_value)
-    
-    return net_debt_value
-
 
 # Streamlit app
 st.title("Investify ® Dashboard")
@@ -517,17 +509,10 @@ if ticker:
 
     st.subheader("Calculating the Cost of Debt to the Firm")
     ie = cost_of_debt(ticker) # interest expense
-    nd = get_net_debt(ticker) # net debt
+    mkt = get_market_cap(ticker)
     
-    cod = ie / nd
-    
-    if cod < 0.05:
-        st.write("Cost of Debt to the Firm is Relatively Low: {:.2f}%".format(cod * 100))
-    elif 0.05 <= cod < 0.1:
-        st.write("Cost of Debt to the Firm is Moderate: {:.2f}%".format(cod * 100))
-    else:
-        st.write("Cost of Debt to the Firm is High: {:.2f}%".format(cod * 100))
-    
+    cod = ie / mkt
+    st.write(f"Cost of Debt Relative to the Firm, Makes up {cod*100:.2f}% of the company's market cap of {mkt} ")
     
 
     
