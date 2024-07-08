@@ -438,7 +438,7 @@ if ticker:
     
     
     st.subheader("Forecasted Stock Price")
-    st.write("Forecasted Prices are likely not Applicable to stocks poised for Beta-Reformation")
+    st.write("Forecasted Prices are projected for next 3 years, and are more representative of growth stocks, thus likely not applicable to stocks poised for changes in market condition, or 'deep value'.")
     analyzer.forecast_stock()
     
     st.subheader("Key Metrics")
