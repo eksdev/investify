@@ -441,10 +441,6 @@ if ticker:
     metrics_df = get_metrics(ticker)
     st.table(metrics_df)
 
-    st.subheader("Other Balance Sheet Metrics")
-    balance_sheet_df = get_balance_sheet_metrics(ticker)
-    st.write(balance_sheet_df)
-
     st.subheader("Similar Stocks Metrics")
     similar_stocks_df = get_similar_stocks(ticker)
     if len(similar_stocks_df) > 0: 
