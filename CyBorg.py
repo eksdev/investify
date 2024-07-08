@@ -446,14 +446,15 @@ if ticker:
     metrics_df = get_metrics(ticker)
     st.table(metrics_df)
 
-    st.subheader("Similar Stocks Metrics")
-    similar_stocks_df = get_similar_stocks(ticker)
-    if len(similar_stocks_df) > 0: 
-        st.write("Similar Stocks are found either through industry, or trading characteristics. ")
-        st.write(similar_stocks_df)
-    else:
-        default = f"No similar stocks were found for {ticker}"
-        st.write(default)
+    # logic for collecting and running for related tickers isn't working in online version. 
+    #st.subheader("Similar Stocks Metrics")
+    #similar_stocks_df = get_similar_stocks(ticker)
+    #if len(similar_stocks_df) > 0: 
+    #    st.write("Similar Stocks are found either through industry, or trading characteristics. ")
+    #    st.write(similar_stocks_df)
+    #else:
+    #    default = f"No similar stocks were found for {ticker}"
+    #    st.write(default)
 
     
 
