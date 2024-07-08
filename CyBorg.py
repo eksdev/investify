@@ -395,18 +395,21 @@ class StonkGather:
         st.markdown(f"### {self.ticker} Historical and Forecasted Prices")
 
 # Streamlit app
-st.title("Comprehensive Analysis of Stock")
+st.title("Investify ® Dashboard")
 
 ticker = st.text_input("Enter stock ticker (e.g., AAPL):", "").upper()
 
 if ticker:
+    
     st.write(f"Analyzing {ticker}...")
     analyzer = StonkGather(ticker)
 
     ratings, insider_sales, description, news = get_analyst_ratings(ticker)
+    st.subheader(f"{ticker} Information:")
     st.write(description)
 
     if len(ratings) > 0:
+        st.write(f"Opinions of the {len(ratings} analysts covering {ticker}")
         st.write("Analyst Ratings:")  # Analyst Ratings
         st.write(pd.DataFrame(ratings))
     else: 
@@ -425,16 +428,17 @@ if ticker:
         st.write(pd.DataFrame(news))
     
 
-    st.subheader("Technical Analysis")  # short technical analysis
+    st.subheader("Analysis of SMA 'Golden-Cross' Relationship")  # short technical analysis
     statement = analyzer.technical_analysis()
     st.write(statement)
 
     st.subheader("Stock Plots")
     analyzer.plot_stock()
 
-    st.session_state.setdefault('messages', []).append({"role": "assistant", "content": "Based on Monte-Carlo Simulation I've Approximately Modelled Future Stock Price Movements"})
+    
     
     st.subheader("Forecasted Stock Price")
+    st.write("Forecasted Prices are likely not Applicable to stocks poised for Beta-Reformation")
     analyzer.forecast_stock()
     
     st.subheader("Key Metrics")
@@ -444,11 +448,11 @@ if ticker:
     st.subheader("Similar Stocks Metrics")
     similar_stocks_df = get_similar_stocks(ticker)
     if len(similar_stocks_df) > 0: 
-        st.session_state.messages.append({"role": "assistant", "content": f"Here are some similar stocks to {ticker}"})
+        st.write("Similar Stocks are found either through industry, or trading characteristics. "
         st.write(similar_stocks_df)
     else:
         default = f"No similar stocks were found for {ticker}"
-        st.session_state.messages.append({"role": "assistant", "content": default})
+        st.write(default)
 
     
 
