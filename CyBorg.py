@@ -442,18 +442,26 @@ class StonkGather:
 def get_net_debt(ticker):
     balance_sheet = get_balance_sheet_metrics(ticker)
     
-    if 'Net Debt' in balance_sheet['Metric'].values:
-        # Extract the value from the '1/31/2024' column where 'Metric' is 'Net Debt'
-        net_debt_value = balance_sheet.loc[balance_sheet['Metric'] == 'Net Debt', '1/31/2024'].values[0]
-        
-        # Remove commas and convert to float
-        net_debt_value = net_debt_value.replace(",", "")
-        net_debt_value = float(net_debt_value)
-        
-        return net_debt_value
-    else:
-        print(f"Net Debt not found in the balance sheet for {ticker}")
+    if 'Metric' not in balance_sheet.columns:
+        print(f"Column 'Metric' not found in the balance sheet for {ticker}")
         return None
+    
+    if '1/31/2024' not in balance_sheet.columns:
+        print(f"Column '1/31/2024' not found in the balance sheet for {ticker}")
+        return None
+
+    if 'Net Debt' not in balance_sheet['Metric'].values:
+        print(f"'Net Debt' not found in the balance sheet for {ticker}")
+        return None
+
+    # Extract the value from the '1/31/2024' column where 'Metric' is 'Net Debt'
+    net_debt_value = balance_sheet.loc[balance_sheet['Metric'] == 'Net Debt', '1/31/2024'].values[0]
+    
+    # Remove commas and convert to float
+    net_debt_value = net_debt_value.replace(",", "")
+    net_debt_value = float(net_debt_value)
+    
+    return net_debt_value
 
 
 # Streamlit app
