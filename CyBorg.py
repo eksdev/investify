@@ -81,7 +81,7 @@ def get_similar_stocks(ticker):
     if s_stocks.empty:
         return s_stocks
 
-    for metric in ['ROE', 'ROA', 'Short Interest', 'Income', 'Sales', 'Market Cap', 'Forward P/E', 'Beta', 'Employees', 'Sales Y/Y TTM', 'Insider Own']:
+    for metric in ['PE','ROE', 'ROA', 'Short Interest', 'Income', 'Sales', 'Market Cap', 'Forward P/E', 'Beta', 'Employees', 'Sales Y/Y TTM', 'Insider Own']:
         s_stocks[metric] = np.nan
 
     for i in range(len(s_stocks)):
