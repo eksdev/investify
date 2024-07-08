@@ -121,7 +121,7 @@ def get_balance_sheet_metrics(ticker):
 
     bsheet_metrics = pd.DataFrame(rows_list)
     bsheet_metrics = bsheet_metrics.dropna()
-    bsheet_metrics = bsheet_metrics[bsheet_metrics['Metric'].isin(['Total Assets', 'Working Capital', 'Net Tangible Assets', 'Tangible Book Value', 'Net Debt', 'Shares Issued'])]
+    #bsheet_metrics = bsheet_metrics[bsheet_metrics['Metric'].isin(['Total Assets', 'Working Capital', 'Net Tangible Assets', 'Tangible Book Value', 'Net Debt', 'Shares Issued'])]
     return bsheet_metrics
 
 def get_analyst_ratings(ticker):
