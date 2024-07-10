@@ -507,12 +507,13 @@ if ticker:
     metrics_df = get_metrics(ticker)
     st.table(metrics_df)
 
-    st.subheader("Calculating the Cost of Debt to the Firm")
     ie = cost_of_debt(ticker) # interest expense
     mkt = get_market_cap(ticker)
     
     cod = ie / mkt
-    st.write(f"Cost of Debt Relative to the Firm, Makes up {cod*100:.2f}% of the company's market cap of {mkt} ")
+    if ie and mkt is not None:
+        st.subheader("Calculating the Cost of Debt to the Firm")
+        st.write(f"Expense on interest is ${ie}, relative to the company's market cap of ${mkt}")
     
 
     
