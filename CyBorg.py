@@ -511,9 +511,11 @@ if ticker:
     mkt = get_market_cap(ticker)
     
     cod = ie / mkt
+    st.subheader("Calculating the Cost of Debt to the Firm")
     if ie and mkt is not None:
-        st.subheader("Calculating the Cost of Debt to the Firm")
         st.markdown(f"Expense on interest is ${ie}, relative to the company's market cap of ${mkt}")
+    else:
+        st.markdown("Data was incompletely collected")
     
 
     
